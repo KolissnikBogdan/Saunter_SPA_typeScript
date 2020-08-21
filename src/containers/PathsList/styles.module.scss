@@ -1,0 +1,13 @@
+@import './src/sourse/styles/variables.scss';
+
+a {
+  color: $link-color !important;
+  text-decoration: none !important;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.colOverflow {
+  overflow-y: auto;
+  height: 85vh;
+}
