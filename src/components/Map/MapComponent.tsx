@@ -10,7 +10,6 @@ import { compose, withProps } from 'recompose'
 import MapDirectionsRenderer from './MapDirectionsRenderer'
 
 import { IMap } from '../../models/map'
-import computeDistance from '../../utils/computeDistance'
 
 const Map = compose<IMap, IMap>(
   withProps({

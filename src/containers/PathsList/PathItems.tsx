@@ -55,7 +55,7 @@ const PathItems: React.FC = () => {
         <Row>
           <Col
             className={cn({
-              ['pl-0 border-right border-dark']: true,
+              'pl-0 border-right border-dark' : true,
               [styles['colOverflow']]: true,
             })}
           >

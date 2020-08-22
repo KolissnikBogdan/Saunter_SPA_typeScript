@@ -22,7 +22,7 @@ const useForm = (
     let target = e.target as HTMLInputElement
     setState({
       ...state,
-      [target.id]: target.value,
+      [target.id]: target.value
     })
   }
 

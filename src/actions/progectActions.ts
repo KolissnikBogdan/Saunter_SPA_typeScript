@@ -1,9 +1,7 @@
 import { IPathItem } from '../models/pathItem'
 import { actionTypes as itemActionTypes } from '../store/reducers/itemReducer'
 
-export function addItem(
-  item: IPathItem
-): (
+export function addItem(item: IPathItem): (
   dispatch: Function,
   getState: object,
   { getFirestore }: { getFirestore: any }

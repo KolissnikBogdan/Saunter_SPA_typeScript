@@ -8,6 +8,8 @@ import { createFirestoreInstance } from 'redux-firestore'
 import store from 'store/index'
 import NotFoundPages from '../Pages/NoFoundPage'
 import MainPage from '../Pages/MainPage'
+import Login from '../Pages/LoginPage'
+import Register from '../Pages/RegisterPage'
 
 const rrfProps = {
   firebase,
@@ -25,6 +27,8 @@ const App: React.FC = () => {
       <ReactReduxFirebaseProvider {...rrfProps}>
         <Router>
           <Switch>
+            <Route exact path="/login" component={Login}/>
+            <Route exact path="/register" component={Register}/>
             <Route exact path="/" component={MainPage}/>
             <Route component={NotFoundPages}/>
           </Switch>
