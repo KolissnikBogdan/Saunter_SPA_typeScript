@@ -1,0 +1,54 @@
+@mixin transition($transition) {
+    -webkit-transition: $transition;
+    -moz-transition: $transition;
+    transition: $transition;
+}
+
+@mixin transform($x, $y) {
+    -webkit-transform: translate($x, $y);
+    -ms-transform: translate($x, $y);
+    transform: translate($x, $y);
+}
+
+@mixin box-shadow($shadow...) {
+    -webkit-box-shadow: $shadow;
+    -moz-box-shadow: $shadow;
+    box-shadow: $shadow;
+}
+
+#login {
+    @include transform(-50%, -50%);
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+
+
+.login {
+    @include transition(.3s);
+
+    h5 {
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 17px;
+    }
+}
+
+#inner-wrapper {
+    @include box-shadow(0 0 12px 1px rgba(0, 0, 0, 0.10));
+
+    color: #1d1d1d;
+    font-size: 19px;
+    line-height: 1.7em;
+    font-weight: 300;
+    padding: 50px;
+    background: #fcfbfa;
+    margin-bottom: 100px;
+
+    &:hover {
+        @include box-shadow(0 0 15px 1px rgba(0, 0, 0, 0.30))
+    }
+}

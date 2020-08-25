@@ -6,4 +6,7 @@ export interface IPathItem {
   pathLength: string,
   route: any[],
   favorite?: any | undefined
+  authorFirsName?: any,
+  authorLastName?: any,
+  authorId?: any,
 }

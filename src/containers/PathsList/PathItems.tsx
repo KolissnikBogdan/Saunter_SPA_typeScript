@@ -22,31 +22,56 @@ import styles from './styles.module.scss'
 
 const PathItems: React.FC = () => {
   const [searchQuery, setQuery] = useState('')
+  const [showFav, setShowFav] = useState(false)
+  const [btnText, setBtnText] = useState('Show favorites')
+  const dispatch = useDispatch()
+
+  useFirestoreConnect(['pathDescription'])
 
   const inputEvent = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const data = event.target.value
+
     setQuery(data)
   }
 
-  const dispatch = useDispatch()
-  useFirestoreConnect(['pathDescription'])
+  const auth = useSelector((state: RootState) => state.firebase.auth)
+
   const pathDescription = useSelector(
     (state: RootState) => state.firestore.ordered.pathDescription
   )
 
+  const favoriteItems: IPathItem[] =
+    pathDescription &&
+    pathDescription
+      .filter((item: IPathItem) => item.authorId === auth.uid)
+      .filter((item: IPathItem) => item.favorite)
+      .filter((item: IPathItem) => {
+        return (
+          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.fDescript.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      })
+
   const filterItems: IPathItem[] =
     pathDescription &&
-    pathDescription.filter((item: IPathItem) => {
-      return (
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.fDescript.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    })
+    pathDescription
+      .filter((item: IPathItem) => item.authorId === auth.uid)
+      .filter((item: IPathItem) => {
+        return (
+          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.fDescript.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      })
 
   const handleClick = (path: IPathItem) => {
     dispatch(selectItem(path))
+  }
+
+  const handleFavClick = () => {
+    setShowFav(!showFav)
+    showFav ? setBtnText('Show favorites') : setBtnText('Hide favorites')
   }
 
   if (pathDescription && pathDescription.length !== 0) {
@@ -55,14 +80,14 @@ const PathItems: React.FC = () => {
         <Row>
           <Col
             className={cn({
-              'pl-0 border-right border-dark' : true,
+              'pl-0 border-right border-dark': true,
               [styles['colOverflow']]: true,
             })}
           >
             <InputGroup className="mb-3">
               <FormControl
                 type="text"
-                placeholder="Type..."
+                placeholder="Type for search..."
                 aria-describedby="basic-addon2"
                 value={searchQuery}
                 onChange={inputEvent}
@@ -78,16 +103,27 @@ const PathItems: React.FC = () => {
                   />
                 </Button>
               </InputGroup.Append>
+              <Button onClick={handleFavClick} className="ml-2">
+                {btnText}
+              </Button>
             </InputGroup>
-            {filterItems
-              .sort((a, b) => b.favorite - a.favorite)
-              .map(item => (
-                <PathItem
-                  key={item.id}
-                  item={item}
-                  onInfoChange={handleClick}
-                />
-              ))}
+            {showFav
+              ? favoriteItems.map(item => (
+                  <PathItem
+                    key={item.id}
+                    item={item}
+                    onInfoChange={handleClick}
+                  />
+                ))
+              : filterItems
+                  .sort((a, b) => b.favorite - a.favorite)
+                  .map(item => (
+                    <PathItem
+                      key={item.id}
+                      item={item}
+                      onInfoChange={handleClick}
+                    />
+                  ))}
           </Col>
           <Col className={styles['colOverflow']}>
             <FullDecript />

@@ -9,22 +9,24 @@ import { deleteItem, markFavorite } from '../../actions/progectActions'
 import MapContainer from '../../components/Map/MapComponent'
 
 const FullDecript = () => {
-  const dispatch = useDispatch();
-  const selectedPath = useSelector((state: RootState) => state.itemDescript.selectedItem);
+  const dispatch = useDispatch()
+  const selectedPath = useSelector(
+    (state: RootState) => state.itemDescript.selectedItem
+  )
 
   const handleRemove = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    dispatch(deleteItem(selectedPath?.id));
+    e.preventDefault()
+    dispatch(deleteItem(selectedPath?.id))
   }
 
   const handleIsFavorite = () => {
-    dispatch(markFavorite(selectedPath?.id));
+    dispatch(markFavorite(selectedPath?.id))
   }
 
   if (selectedPath) {
     return (
       <>
-        <Row className="align-items-center" >
+        <Row className="align-items-center">
           <Col>
             <h2>{selectedPath.title}</h2>
           </Col>
@@ -33,9 +35,7 @@ const FullDecript = () => {
           </Col>
         </Row>
         <Row>
-          <Col className="pb-2">
-            {selectedPath.fDescript}
-          </Col>
+          <Col className="pb-2">{selectedPath.fDescript}</Col>
         </Row>
         <div>
           <MapContainer
@@ -46,8 +46,21 @@ const FullDecript = () => {
         </div>
         <Row className="float-right">
           <ButtonGroup vertical>
-            <Button variant="link" onClick={ handleIsFavorite } className="text-right">Set/unset favorite</Button>
-            <Button variant="link" style={{color: 'red'}} onClick={ handleRemove } className="text-right">Delete</Button>
+            <Button
+              variant="link"
+              onClick={handleIsFavorite}
+              className="text-right"
+            >
+              Set/unset favorite
+            </Button>
+            <Button
+              variant="link"
+              style={{ color: 'red' }}
+              onClick={handleRemove}
+              className="text-right"
+            >
+              Delete
+            </Button>
           </ButtonGroup>
         </Row>
       </>
@@ -55,7 +68,9 @@ const FullDecript = () => {
   } else {
     return (
       <Row className="justify-content-center align-items-center">
-        <h5 className="text-muted text-center text-middle">Select path to review &nbsp;</h5>
+        <h5 className="text-muted text-center text-middle">
+          Select path to review &nbsp;
+        </h5>
         <Spinner className="text-muted" animation="border" />
       </Row>
     )

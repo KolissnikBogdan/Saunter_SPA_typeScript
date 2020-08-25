@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Container, Navbar, Button } from 'react-bootstrap'
+import { Container, Navbar, Button, Nav } from 'react-bootstrap'
 import SignedInLinks from './SignedInLinks'
 
 import PathModalForm from '../ModalForm/ModalForm'
@@ -10,8 +10,9 @@ import { Redirect } from 'react-router-dom'
 const Header: React.FC = () => {
   const [modalShow, setModalShow] = useState(false)
   const auth = useSelector((state: RootState) => state.firebase.auth);
+  const profile = useSelector((state: RootState) => state.firebase.profile);
 
-  const links = auth.uid && <SignedInLinks />;
+  const links = auth.uid && <SignedInLinks {...profile}/>;
 
   if (!auth.uid) return <Redirect to='/login' />
   return (
@@ -29,9 +30,11 @@ const Header: React.FC = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-          {links}
-          <Button onClick={() => setModalShow(true)}>Add path</Button>
-          <PathModalForm show={modalShow} onHide={() => setModalShow(false)} />
+          <Nav>
+            {links}
+            <Button className="" onClick={() => setModalShow(true)}>Add path</Button>
+            <PathModalForm show={modalShow} onHide={() => setModalShow(false)} />
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>

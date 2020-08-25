@@ -1,6 +1,7 @@
-import { IUser } from '../models/user'
-import { authTypes as userActionTypes } from '../store/reducers/authReducer'
 import firebase from 'firebase/app'
+
+import { IUser } from '../models/user'
+import { authTypes } from '../store/reducers/authReducer'
 
 export function signIn(
   credentials: IUser
@@ -8,11 +9,12 @@ export function signIn(
   return (dispatch: Function, getState: object) => {
     firebase
       .auth()
-      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
-      .then(function () {
-        return firebase
-          .auth()
-          .signInWithEmailAndPassword(credentials.email, credentials.password)
+      .signInWithEmailAndPassword(credentials.email, credentials.password)
+      .then((res) => {
+        dispatch({ type: authTypes.LOGIN })
+      })
+      .catch((err): any => {
+        dispatch({ type: authTypes.LOGIN_ERR, payload: err.message })
       })
   }
 }
@@ -33,18 +35,16 @@ export function signUp(
 
     firebase
       .auth()
-      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
-      .then(function () {
-        return firebase
-          .auth()
-          .createUserWithEmailAndPassword(newUser.email, newUser.password)
-      })
-      .then(resp => {
-        return firestore.collection('users').doc(resp?.user?.uid).set({
+      .createUserWithEmailAndPassword(newUser.email, newUser.password)
+      .then(res => {
+        dispatch({ type: authTypes.SIN_UP })
+        return firestore.collection('users').doc(res?.user?.uid).set({
           firstName: newUser.firstName,
           lastName: newUser.lastName,
         })
-      })
+      }).catch((err): any => {
+      dispatch({ type: authTypes.SIN_UP_ERR, payload: err.message })
+    })
   }
 }
 
@@ -54,7 +54,7 @@ export function signOut(): (dispatch: Function, getState: object) => void {
       .auth()
       .signOut()
       .then(() => {
-        dispatch({ type: userActionTypes.SING_OUT })
+        console.log()
       })
   }
 }

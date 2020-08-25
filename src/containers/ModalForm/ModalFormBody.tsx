@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { Row, Col, Form, Button } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
-import { useFirestoreConnect } from 'react-redux-firebase'
+import { useDispatch, useSelector } from 'react-redux'
+import { useFirebaseConnect, useFirestoreConnect } from 'react-redux-firebase'
 
 import MapContainer from '../../components/Map/MapComponent'
 import useForm from '../../utils/hooks/useForm'
@@ -11,9 +11,13 @@ import validate from '../../utils/validationForm'
 import { IModalProp } from '../../models/modal'
 import { addItem } from '../../actions/progectActions'
 import { IPathItem } from '../../models/pathItem'
+import { RootState } from '../../store'
 
 const ModalFormBody = (props: IModalProp) => {
   useFirestoreConnect(['pathDescription'])
+
+  const profile = useSelector((state: RootState) => state.firebase.profile);
+  const auth = useSelector((state: RootState) => state.firebase.auth);
 
   const dispatch = useDispatch()
   const {
@@ -26,7 +30,7 @@ const ModalFormBody = (props: IModalProp) => {
   } = useForm(submit, validate)
 
   function submit() {
-    dispatch(addItem(state as IPathItem))
+    dispatch(addItem(state as IPathItem, profile, auth))
     props.onHide()
   }
 

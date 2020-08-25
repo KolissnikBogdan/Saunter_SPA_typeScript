@@ -14,7 +14,7 @@ var firebaseConfig = {
 
 try {
   firebase.initializeApp(firebaseConfig)
-  firebase.firestore().settings({timestampsInSnapshots: true})
+  firebase.firestore()
 } catch (err) {
   console.log(err.toString())
 }

@@ -1,7 +1,7 @@
 import { IPathItem } from '../models/pathItem'
 import { actionTypes as itemActionTypes } from '../store/reducers/itemReducer'
 
-export function addItem(item: IPathItem): (
+export function addItem(item: IPathItem, prof: any, auth: any): (
   dispatch: Function,
   getState: object,
   { getFirestore }: { getFirestore: any }
@@ -12,18 +12,25 @@ export function addItem(item: IPathItem): (
     { getFirestore }: { getFirestore: any }
   ) => {
     const firestore = getFirestore()
+
     firestore
       .collection('pathDescription')
       .add({
         ...item,
-        createAt: new Date(),
+        authorFirsName: prof?.firstName,
+        authorLastName: prof?.lastName,
+        authorId: auth?.uid,
+        createAt: new Date()
       })
       .then(() => {
         dispatch({
           type: itemActionTypes.ADD,
           payload: {
             ...item,
-            createAt: new Date(),
+            authorFirsName: prof?.firstName,
+            authorLastName: prof?.lastName,
+            authorId: auth?.uid,
+            createAt: new Date()
           },
         })
       })
@@ -81,7 +88,7 @@ export function markFavorite(
   }
 }
 
-export function selectItem(selectedPath: IPathItem) {
+export function selectItem(selectedPath: IPathItem | null) {
   return {
     type: 'ITEM_SELECTED',
     payload: selectedPath,
