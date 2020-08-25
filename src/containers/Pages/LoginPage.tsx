@@ -13,8 +13,8 @@ import './styles.scss'
 
 const Login = () => {
   const auth = useSelector((state: RootState) => state.firebase.auth)
-  const authP = useSelector((state: RootState) => state.auth.authErrorLogin)
-  const authPP = useSelector((state: RootState) => state.auth.isJustRegister)
+  const authErrorLogin = useSelector((state: RootState) => state.auth.authErrorLogin)
+  const isJustRegister = useSelector((state: RootState) => state.auth.isJustRegister)
 
   const history = useHistory()
   const dispatch = useDispatch()
@@ -29,7 +29,7 @@ const Login = () => {
     history.push('/')
   }
 
-  if (!auth.isEmpty && !authPP) return <Redirect to="/" />
+  if (!auth.isEmpty && !isJustRegister) return <Redirect to="/" />
   return (
     <div className="container">
       <div className="col-md-4" id={'login'}>
@@ -64,12 +64,12 @@ const Login = () => {
                 </div>
               </div>
               {errors.password && (
-                <p style={{ color: 'red', fontSize: '10px' }}>
+                <p style={{ color: 'red', fontSize: '12px' }}>
                   {errors.password}
                 </p>
               )}
-              {authP && authP ? (
-                <p style={{ color: 'red', fontSize: '10px' }}>*{authP}</p>
+              {authErrorLogin && authErrorLogin ? (
+                <p style={{ color: 'red', fontSize: '12px' }}>*{authErrorLogin}</p>
               ) : null}
 
               <button className="btn btn-outline-success btn-block">

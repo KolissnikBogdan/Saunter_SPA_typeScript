@@ -24,6 +24,7 @@ const PathItems: React.FC = () => {
   const [searchQuery, setQuery] = useState('')
   const [showFav, setShowFav] = useState(false)
   const [btnText, setBtnText] = useState('Show favorites')
+
   const dispatch = useDispatch()
 
   useFirestoreConnect(['pathDescription'])
