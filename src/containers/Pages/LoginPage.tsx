@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect, useHistory } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import useForm from '../../utils/hooks/useForm'
@@ -8,6 +8,7 @@ import { signIn } from '../../actions/authActions'
 import { IUser } from '../../models/user'
 import { RootState } from '../../store'
 import { validateFormLogin } from '../../utils/validationForm'
+import history from '../../history/history'
 
 import './styles.scss'
 
@@ -16,8 +17,10 @@ const Login = () => {
   const authErrorLogin = useSelector((state: RootState) => state.auth.authErrorLogin)
   const isJustRegister = useSelector((state: RootState) => state.auth.isJustRegister)
 
-  const history = useHistory()
+  console.log(isJustRegister)
+
   const dispatch = useDispatch()
+  let token2 = JSON.parse(localStorage.getItem('token') as string)
 
   const { handleSubmit, handleChange, state, errors } = useForm(
     submit,
@@ -26,10 +29,9 @@ const Login = () => {
 
   function submit() {
     dispatch(signIn(state as IUser))
-    history.push('/')
   }
 
-  if (!auth.isEmpty && !isJustRegister) return <Redirect to="/" />
+  if ((!auth.isEmpty && !isJustRegister) || (token2 && token2.isLoaded)) return <Redirect to="/dashboard" />
   return (
     <div className="container">
       <div className="col-md-4" id={'login'}>

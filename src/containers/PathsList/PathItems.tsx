@@ -75,6 +75,7 @@ const PathItems: React.FC = () => {
     showFav ? setBtnText('Show favorites') : setBtnText('Hide favorites')
   }
 
+
   if (pathDescription && pathDescription.length !== 0) {
     return (
       <React.Fragment>

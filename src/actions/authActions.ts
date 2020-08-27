@@ -3,6 +3,8 @@ import firebase from 'firebase/app'
 import { IUser } from '../models/user'
 import { authTypes } from '../store/reducers/authReducer'
 
+import history from '../history/history'
+
 export function signIn(
   credentials: IUser
 ): (dispatch: Function, getState: object) => void {
@@ -10,8 +12,10 @@ export function signIn(
     firebase
       .auth()
       .signInWithEmailAndPassword(credentials.email, credentials.password)
-      .then((res) => {
+      .then((res: any) => {
+        localStorage.setItem('token', JSON.stringify(res));
         dispatch({ type: authTypes.LOGIN })
+        history.push('/dashboard')
       })
       .catch((err): any => {
         dispatch({ type: authTypes.LOGIN_ERR, payload: err.message })
@@ -38,13 +42,26 @@ export function signUp(
       .createUserWithEmailAndPassword(newUser.email, newUser.password)
       .then(res => {
         dispatch({ type: authTypes.SIN_UP })
-        return firestore.collection('users').doc(res?.user?.uid).set({
-          firstName: newUser.firstName,
-          lastName: newUser.lastName,
+        history.push('/login')
+        res.user?.updateProfile({
+          displayName: newUser.firstName + ' ' + newUser.lastName,
+          photoURL: 'https://cdn0.iconfinder.com/data/icons/elasto-online-store/26/00-ELASTOFONT-STORE-READY_user-circle-256.png'
         })
-      }).catch((err): any => {
-      dispatch({ type: authTypes.SIN_UP_ERR, payload: err.message })
-    })
+        firestore
+          .collection('users')
+          .doc(res?.user?.uid)
+          .set({
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            photoURL: 'https://cdn0.iconfinder.com/data/icons/elasto-online-store/26/00-ELASTOFONT-STORE-READY_user-circle-256.png',
+            createAt: new Date(),
+            email: newUser.email
+          })
+      })
+      .then()
+      .catch((err): any => {
+        dispatch({ type: authTypes.SIN_UP_ERR, payload: err.message })
+      })
   }
 }
 
@@ -54,7 +71,8 @@ export function signOut(): (dispatch: Function, getState: object) => void {
       .auth()
       .signOut()
       .then(() => {
-        console.log()
+        localStorage.removeItem('token')
+        history.push('/login')
       })
   }
 }

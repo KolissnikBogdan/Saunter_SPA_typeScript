@@ -1,6 +1,7 @@
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
+import 'firebase/storage'
 
 var firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -19,4 +20,6 @@ try {
   console.log(err.toString())
 }
 
-export default firebase
+const storage = firebase.storage()
+
+export { storage, firebase as default}

@@ -11,6 +11,7 @@ import useForm from '../../utils/hooks/useForm'
 
 import './styles.scss'
 import { validateFormRegister } from '../../utils/validationForm'
+import history from '../../history/history'
 
 const Register = () => {
   const { handleSubmit, handleChange, state, errors } = useForm(
@@ -22,14 +23,14 @@ const Register = () => {
   const authP = useSelector((state: RootState) => state.auth.authErrorRegister)
 
   const dispatch = useDispatch()
-  const history = useHistory()
 
   function submit() {
     dispatch(signUp(state as IUser))
-    history.push('/login')
   }
 
-  if (!auth.isEmpty) return <Redirect to="/" />
+  let token2 = JSON.parse(localStorage.getItem('token') as string)
+
+  if (!auth.isEmpty) return <Redirect to="/dashboard" />
   return (
     <div className="col-md-4" id={'login'}>
       <section id={"inner-wrapper"} className="login">
@@ -102,6 +103,7 @@ const Register = () => {
             {authP && (<b className="error" style={{ color: 'red' }}>{authP}</b>)}
 
             <button className="btn btn-outline-success btn-block" type={'submit'}>Register</button>
+            <button className="btn btn-outline-warning btn-block" onClick={() => {history.push('/login')}} type={'button'}>Back to login</button>
           </form>
         </article>
       </section>

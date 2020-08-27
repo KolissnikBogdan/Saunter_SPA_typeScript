@@ -75,7 +75,7 @@ export default function authInfo(
         authErrorRegister: actions.payload,
       }
     case authTypes.SING_OUT:
-      return { ...initState }
+      return { ...initState, isJustRegister: false }
     default:
       return state
   }
